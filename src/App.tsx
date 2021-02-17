@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './app.scss';
+import CategoryList from './components/categories/CategoryList'
+import Toolbar from './modules/toolbar/Toolbar';
+import { Layout } from 'antd'
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
+import UpsertCategory from './modules/category/UpsertCategory';
+import CategoryView from './modules/category/CategoryView';
+import React, { useEffect } from 'react';
+import queryString from 'query-string'
+import { selectCategory } from './store/Categories';
+import { useDispatch } from 'react-redux';
 
-function App() {
+const App = () => {
+  const location = useLocation()
+  const dispatch = useDispatch()
+  
+  useEffect(() => {
+    const queryCategoryName = queryString.parse(location.search).categoryName as string
+    if (!!queryCategoryName) {
+      dispatch(selectCategory(queryCategoryName))
+    }
+  }, [dispatch, location])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Layout className="app">
+      <Toolbar />
+      <div className="main">
+        <Switch>
+          <Route path="/categories">
+            <CategoryList />
+          </Route>
+          <Route path='/upsert'>
+            <UpsertCategory />
+          </Route>
+          <Route path='/view'>
+            <CategoryView />
+          </Route>
+          <Route render={() => <Redirect to="/categories" />} />
+        </Switch>
+      </div>
+    </Layout>
+  )
 }
 
 export default App;
