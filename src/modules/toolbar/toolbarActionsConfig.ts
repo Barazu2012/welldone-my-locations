@@ -5,19 +5,19 @@ import {
   PlusOutlined as AddIcon
 } from '@ant-design/icons'
 
-export interface CategoryAction {
+export interface EntityAction {
   type: 'delete' | 'edit' | 'view' | 'add',
   displayName: string,
   icon: typeof ViewIcon,
   path?: '/upsert' | '/view'
 }
 
-export const selectedCategoryActions: CategoryAction[] = [
+export const selectedEntityActions: EntityAction[] = [
   { type: 'delete', displayName: 'Delete', icon: DeleteIcon },
   { type: 'edit', displayName: 'Edit', icon: EditIcon, path: '/upsert' },
   { type: 'view', displayName: 'View Details', icon: ViewIcon,  path: '/view' }
 ]
 
-export const generalActions: CategoryAction[] = [
+export const generalActions: EntityAction[] = [
   { type: 'add', displayName: 'New Category', icon: AddIcon, path: '/upsert'}
 ]

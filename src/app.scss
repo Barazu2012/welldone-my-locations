@@ -1,4 +1,5 @@
 @import './modules/toolbar/toolbar.scss';
+@import './modules/footbar/footbar.scss';
 
 .app {
   display: flex;
@@ -10,7 +11,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    max-height: calc(100vh - 64px);
+    max-height: calc(100vh - #{$footbar-height} - #{$toolbar-height});
     overflow: auto;
     margin-top: $toolbar-height;
   }

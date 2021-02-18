@@ -1,10 +1,10 @@
-import { CategoryAction } from './toolbarActionsConfig'
+import { EntityAction } from './toolbarActionsConfig'
 import classNames from 'classnames'
 import { useLocation } from 'react-router-dom'
 
 interface Props {
-  action: CategoryAction
-  onClick(action: CategoryAction): void
+  action: EntityAction
+  onClick(action: EntityAction): void
 }
 
 const ToolbarAction = ({action, onClick}: Readonly<Props>) => {

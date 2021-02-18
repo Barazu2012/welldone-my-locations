@@ -1,0 +1,13 @@
+.upsert-location {
+  .coordinates-container {
+    display: flex;
+    justify-content: space-between;
+    > div {
+      display: flex;
+      width: calc(50% - 12px);
+      > input {
+        width: 100%;
+      }
+    }
+  }
+}

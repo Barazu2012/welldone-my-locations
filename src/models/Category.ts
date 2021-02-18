@@ -1,4 +1,6 @@
-export default class Category {
+import IEntity from "./IEntity"
+
+export default class Category implements IEntity {
   name: string
 
   constructor(name: string) {

@@ -13,7 +13,7 @@ const loadState = (): CategoriesState | undefined => {
   } catch (err) {
     console.error('Failed to load local storage', err)
   }
-}; 
+}
 
 export const saveCategoriesState = ({all}: CategoriesState) => {
   try {
@@ -22,9 +22,14 @@ export const saveCategoriesState = ({all}: CategoriesState) => {
   } catch(err) {
     console.error('Failed to save to local storage', err) 
   }
-};
+}
 
-const initialState: CategoriesState = loadState() || { all: [] }
+const testCats: Category[] = []
+for (let i = 0; i < 20; i++) {
+  testCats.push({name: `test ${i}`})
+}
+const initialState: CategoriesState = {all: testCats}
+// const initialState: CategoriesState = loadState() || { all: [] }
 
 const categoriesSlice = createSlice({
   name: 'categories',

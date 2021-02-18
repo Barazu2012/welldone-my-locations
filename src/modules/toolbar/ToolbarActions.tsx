@@ -4,7 +4,7 @@ import { useTypedSelector } from "../../store";
 import { deleteCategory, selectCategory } from "../../store/Categories";
 import queryString from 'query-string'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
-import { CategoryAction, generalActions, selectedCategoryActions } from './toolbarActionsConfig'
+import { EntityAction, generalActions, selectedEntityActions } from './toolbarActionsConfig'
 import { Modal } from "antd";
 import React from "react";
 import ToolbarAction from "./ToolbarAction";
@@ -13,17 +13,25 @@ const ToolbarActions = () => {
 
   const history = useHistory()
   const dispatch = useDispatch()
-  const selectedCategory = useTypedSelector(state => state.categories.selected)
+
+  //todo: reuse
+  const currentContext = useTypedSelector(state => state.context.current)
+  const isCategory = currentContext === 'categories'
+  const entityState = useTypedSelector(
+    state => isCategory ? state.categories : state.locations
+  )
+  const selectedEntity = entityState.selected
+  const entityName = isCategory ? 'category' : 'location'
 
   const onDelete = () => {
-    if (!selectedCategory) return
-    dispatch(deleteCategory(selectedCategory.name))
+    if (!selectedEntity) return
+    dispatch(deleteCategory(selectedEntity.name))
     dispatch(selectCategory(undefined))
     history.push('/')
   }
 
-  const handleAction = ({type, path}: CategoryAction) => {
-    const search = selectedCategory ? queryString.stringify({categoryName: selectedCategory.name}) : undefined
+  const handleAction = ({type, path}: EntityAction) => {
+    const search = selectedEntity ? queryString.stringify({entityName: selectedEntity.name}) : undefined
     
     switch (type) {
       case 'add': case 'edit': case 'view':
@@ -31,7 +39,7 @@ const ToolbarActions = () => {
         break
       case 'delete':
         Modal.confirm({
-          title: 'Delete Category',
+          title: `Delete ${entityName.toUpperCase()}`,
           icon: <ExclamationCircleOutlined />,
           content: 'Are you sure you want to delete this category?',
           onOk: onDelete,
@@ -46,7 +54,7 @@ const ToolbarActions = () => {
   }
   
   const availableActions = function() {
-    return selectedCategory ? selectedCategoryActions : generalActions
+    return selectedEntity ? selectedEntityActions : generalActions
   }()
 
   return (

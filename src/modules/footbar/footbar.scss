@@ -1,0 +1,17 @@
+$footbar-height: 64px;
+.footbar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: $footbar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 2px 8px #f0f1f2;
+  .footbar-item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    text-transform: capitalize;
+  }
+}
