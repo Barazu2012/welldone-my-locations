@@ -1,0 +1,16 @@
+@import '../../styles/mixins/actions-mixin';
+
+.list-actions-container {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px 6px 24px;
+  .filter-wrapper {
+    .ant-select {
+      width: 160px;
+      margin-right: 12px;
+    }
+  }
+  .list-action {
+    @include action(0 4px 0 0);
+  }
+}

@@ -8,12 +8,11 @@ import { addCategory, editCategory } from '../../store/Categories'
 
 export const UpsertCategory = () => {
 
-  const categories = useTypedSelector(state => state.categories.all)
   const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation()
-
-
+  const categories = useTypedSelector(state => state.categories.all)
+  
   const initialCategoryName = queryString.parse(location.search).entityName
   const initialCategory = categories.find(c => c.name === initialCategoryName)
   const title = initialCategory ? 'Edit Category' : 'Create New Category'

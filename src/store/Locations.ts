@@ -19,7 +19,7 @@ for (let i = 0; i < 20; i++) {
   testLocs.push({
     name: `test location ${i}`,
     address: `test address ${i}`,
-    category: testCats[i],
+    category: testCats[0],
     coordinates: [i + 1, i + 1]
   })
 }
@@ -41,6 +41,10 @@ const locationsSlice = createSlice({
       const [updatedLocation, oldLocationName] = payload
       const oldLocationIdx = state.all.findIndex(ol => ol.name === oldLocationName)
       state.all.splice(oldLocationIdx, 1, updatedLocation)
+
+      if (state.selected?.name === oldLocationName) {
+        state.selected = updatedLocation
+      }
     }
   }
 })

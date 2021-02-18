@@ -1,0 +1,24 @@
+@import '../../modules/footbar/footbar.scss';
+@import '../../modules/toolbar/toolbar.scss';
+
+.location-view {
+  align-items: center;
+  .content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    .properties-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 12px 24px;
+      width: 20%;
+    }
+    .map-wrapper {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - #{$footbar-height} - #{$toolbar-height});
+      width: 300px;
+    }
+  }
+}

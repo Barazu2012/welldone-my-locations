@@ -13,18 +13,23 @@ import { useTypedSelector } from './store';
 import LocationList from './components/locations/LocationList';
 import LocationView from './modules/location/LocationView';
 import UpsertEntity from './modules/upsert/UpsertEntity';
+import { selectLocation } from './store/Locations';
+
+// todo: replace initialLocation/Category to selected
 
 const App = () => {
   const location = useLocation()
   const dispatch = useDispatch()
   const currentContext = useTypedSelector(state => state.context.current)
+  const currentState = useTypedSelector(state => state[currentContext])
   
   useEffect(() => {
-    const queryCategoryName = queryString.parse(location.search).entityName as string
-    if (!!queryCategoryName) {
-      dispatch(selectCategory(queryCategoryName))
+    const entityName = queryString.parse(location.search).entityName as string
+    const selectAction = currentContext === 'categories' ? selectCategory : selectLocation
+    if (entityName && !currentState.selected) {
+      dispatch(selectAction(entityName))
     }
-  }, [dispatch, location])
+  }, [dispatch, location, currentContext, currentState])
 
   return (
     <Layout className="app">

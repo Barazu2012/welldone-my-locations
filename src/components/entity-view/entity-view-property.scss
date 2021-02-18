@@ -1,0 +1,11 @@
+@import '../../styles/mixins/ellipsis-mixin';
+
+.property-wrapper {
+  @include ellipsis;
+  font-size: 1.1em;
+  margin-bottom: 4px;
+  text-transform: capitalize;
+  .label {
+    font-weight: 600;
+  }
+}

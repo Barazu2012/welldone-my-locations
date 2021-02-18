@@ -1,0 +1,16 @@
+@mixin action($margin: 0 0 0 2px) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 22px;
+  margin: $margin;
+  font-size: 20px;
+  cursor: pointer;
+
+  &:hover, &.selected {
+    background-color: #e6f7ff;
+    color: #1890ff;
+  }
+}

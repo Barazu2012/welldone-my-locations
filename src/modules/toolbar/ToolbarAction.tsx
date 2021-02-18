@@ -16,7 +16,7 @@ const ToolbarAction = ({action, onClick}: Readonly<Props>) => {
   return (
     <div className={actionClass} key={type} title={displayName} onClick={() => onClick(action)}>
       <Icon className="toolbar-action-icon" />
-  </div>
+    </div>
   )
 }
 

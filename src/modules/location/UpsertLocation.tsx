@@ -1,5 +1,5 @@
 import './upsert-location.scss'
-import { Form, Input, Button, message, Select } from 'antd'
+import { Form, Input, Button, message } from 'antd'
 import { useTypedSelector } from '../../store'
 import { useHistory, useLocation } from 'react-router-dom'
 import queryString from 'query-string'
@@ -8,6 +8,7 @@ import { addLocation, editLocation } from '../../store/Locations'
 import Location from '../../models/Location'
 import React from 'react'
 import isEqual from 'lodash/isEqual'
+import CategorySelect from '../../components/categories/CategorySelect'
 
 interface FormData {
   name: string, address: string, coordinatesX: number, coordinatesY: number, category: string
@@ -19,8 +20,9 @@ export const UpsertLocation = () => {
   const categories = useTypedSelector(state => state.categories.all)
   const dispatch = useDispatch()
   const history = useHistory()
-  const location = useLocation()
-  const initialLocationName = queryString.parse(location.search).entityName
+  const [form] = Form.useForm()
+  const routerLocation = useLocation()
+  const initialLocationName = queryString.parse(routerLocation.search).entityName
   const initialLocation = locations.find(l => l.name === initialLocationName)
 
   const title = initialLocation ? 'Edit Location' : 'Create New Location'
@@ -61,18 +63,12 @@ export const UpsertLocation = () => {
   return (
     <div className="upsert-location upsert-entity">
       <h1 className="title">{title}</h1>
-      <Form onFinish={handleSubmit}>
+      <Form onFinish={handleSubmit} form={form}>
         <Form.Item name="name" rules={inputRules} initialValue={initialLocationName}>
           <Input placeholder="Enter the location name" autoFocus/>
         </Form.Item>
         <Form.Item name="category" initialValue={initialLocation?.category.name}>
-          <Select placeholder="Select a category" showSearch filterOption>
-            {
-              categories.map(({name}) => (
-                <Select.Option value={name} key={name}> {name} </Select.Option>
-              ))
-            }
-          </Select> 
+          <CategorySelect categories={categories} form={form} formItemName="category"/>
         </Form.Item>
         <Form.Item name="address" initialValue={initialLocation?.address}>
           <Input placeholder="Enter the location address"/>
@@ -85,9 +81,6 @@ export const UpsertLocation = () => {
             <Input placeholder="Coordinates: y (e.g. 25.1244)" type="number"/>
           </Form.Item>
         </div>
-        {/* <Form.Item>
-          <Input placeholder="Category"/>
-        </Form.Item> */}
         <Form.Item>
           <Button type="ghost" onClick={goToLocationsList}> Cancel </Button>
           <Button type="primary" htmlType="submit"> { initialLocation ? 'Save' : 'Create' } </Button>

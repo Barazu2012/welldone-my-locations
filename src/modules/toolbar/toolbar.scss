@@ -1,3 +1,6 @@
+@import '../../styles/mixins/ellipsis-mixin';
+@import '../../styles/mixins/actions-mixin';
+
 $toolbar-height: 64px;
 .toolbar {
   position: absolute;
@@ -11,10 +14,8 @@ $toolbar-height: 64px;
   z-index: 1;
   box-shadow: 0 2px 8px #f0f1f2;
   .toolbar-title {
+    @include ellipsis;
     flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     margin: 0 12px 0 0;
   }
   .toolbar-actions {
@@ -22,22 +23,7 @@ $toolbar-height: 64px;
     align-items: center;
     overflow: hidden;
     .toolbar-action {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
-      min-width: 44px;
-      border-radius: 22px;
-      margin-left: 2px;
-      cursor: pointer;
-      .toolbar-action-icon {
-        font-size: 20px;
-      }
-
-      &:hover, &.selected {
-        background-color: #e6f7ff;
-        color: #1890ff;
-      }
+      @include action;
     }
   }
 }

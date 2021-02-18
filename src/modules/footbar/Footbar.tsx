@@ -18,15 +18,16 @@ const Footbar = () => {
   }
 
   return (
-      <Menu className="footbar" mode="horizontal" theme="dark" defaultSelectedKeys={[currentContext]}>
-        {
-          items.map(item => (
-            <Menu.Item className="footbar-item" key={item} onClick={() => onSelect(item)}>
-              {item}
-            </Menu.Item>
-          ))
-        }
-      </Menu>
+    <Menu className="footbar" mode="horizontal" theme="dark" selectedKeys={[currentContext]}
+      defaultSelectedKeys={[currentContext]}>
+      {
+        items.map(item => (
+          <Menu.Item className="footbar-item" key={item} onClick={() => onSelect(item)}>
+            {item}
+          </Menu.Item>
+        ))
+      }
+    </Menu>
   )
 }
 
