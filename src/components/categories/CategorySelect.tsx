@@ -27,8 +27,8 @@ const CategorySelect = ({categories, form, formItemName, onSelect, placeholder}:
   placeholder = placeholder || "Select a category"
 
   return (
-    <Select placeholder={placeholder} showSearch filterOption onSelect={handleSelect} 
-      defaultValue={form?.getFieldValue('category')} allowClear onClear={() => handleSelect("")}>
+    <Select placeholder={placeholder} showSearch filterOption allowClear onSelect={handleSelect} 
+      defaultValue={form?.getFieldValue('category')} onClear={() => handleSelect("")}>
       {
         categories.map(({name}) => (
           <Select.Option value={name} key={name}> {name} </Select.Option>

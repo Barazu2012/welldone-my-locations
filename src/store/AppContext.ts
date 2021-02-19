@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import LocalStorageService from "../services/LocalStorageService";
 
 export type AppContext = 'locations' | 'categories'
 
@@ -6,23 +7,13 @@ interface ContextState {
   current: AppContext
 }
 
-const loadState = (): ContextState | undefined => {
-  try {
-    const serializedState = localStorage.getItem('context-state');
-    return serializedState ? JSON.parse(serializedState) : undefined
-  } catch (err) {
-    console.error('Failed to load local storage', err)
-  }
-}
+const localStorageService = new LocalStorageService<ContextState>()
 
-export const saveContextState = ({current}: ContextState) => {
-  try {
-    const serializedState = JSON.stringify({current});
-    localStorage.setItem('context-state', serializedState);
-  } catch(err) {
-    console.error('Failed to save to local storage', err) 
-  }
-}
+const loadState = () => localStorageService.loadState('context-state')
+
+export const saveContextState = ({current}: ContextState) => 
+  localStorageService.saveState({current}, 'context-state')
+
 
 const initialState: ContextState = loadState() || { current: 'categories' }
 const contextSlice = createSlice({

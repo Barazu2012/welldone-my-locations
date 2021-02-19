@@ -41,14 +41,16 @@ const LocationList = () => {
 
   return (
     <>
-      <div className="list-actions-container">
-        <div className="filter-wrapper">
-          <CategorySelect categories={categoriesWithLocations} onSelect={filterByCategory}
-            placeholder="Filter by Category"/>
+      { !!locations.length &&
+        <div className="list-actions-container">
+          <div className="filter-wrapper">
+            <CategorySelect categories={categoriesWithLocations} onSelect={filterByCategory}
+              placeholder="Filter by Category"/>
+          </div>
+          <LocationListAction icon={SortIcon} onClick={toggleSort} title="Sort Alphabetically"/>
+          <LocationListAction icon={GroupByIcon} onClick={toggleGroupByCategory} title="Group by category"/>
         </div>
-        <LocationListAction icon={SortIcon} onClick={toggleSort} title="Sort Alphabetically"/>
-        <LocationListAction icon={GroupByIcon} onClick={toggleGroupByCategory} title="Group by category"/>
-      </div>
+      }
       { groupByCategoryActive ?
         categoriesWithLocations.map(category => (
           <div className="section" key={category.name}>

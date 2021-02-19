@@ -1,31 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import LocalStorageService from '../services/LocalStorageService';
 import Category from '../models/Category';
 import Location from '../models/Location'
-
-// todo: local storage
 
 interface LocationsState {
   all: Location[],
   selected?: Location
 }
 
-const testCats: Category[] = []
-for (let i = 0; i < 20; i++) {
-  testCats.push({name: `test ${i}`})
-}
+const localStorageService = new LocalStorageService<LocationsState>()
 
-const testLocs: Location[] = []
-for (let i = 0; i < 20; i++) {
-  testLocs.push({
-    name: `test location ${i}`,
-    address: `test address ${i}`,
-    category: testCats[0],
-    coordinates: [i + 1, i + 1]
-  })
-}
-const initialState: LocationsState = {all: testLocs}
 
-// const initialState: LocationsState = {all: []}
+const loadState = () => localStorageService.loadState('location-state')
+
+export const saveLocationState = ({all}: LocationsState) => 
+  localStorageService.saveState({all}, 'location-state')
+
+// Todo: remove
+// const testCats: Category[] = []
+// for (let i = 0; i < 20; i++) {
+//   testCats.push({name: `test ${i}`})
+// }
+
+// const testLocs: Location[] = []
+// for (let i = 0; i < 40; i++) {
+//   testLocs.push({
+//     name: `test location ${i}`,
+//     address: `test address ${i}`,
+//     category: testCats[0],
+//     coordinates: [i + 1, i + 1]
+//   })
+// }
+// const initialState: LocationsState = {all: testLocs}
+
+const initialState: LocationsState = loadState() || { all: [] }
+
 const locationsSlice = createSlice({
   name: 'locations',
   initialState,

@@ -10,16 +10,12 @@ import React from "react";
 import ToolbarAction from "./ToolbarAction";
 
 const ToolbarActions = () => {
-
   const history = useHistory()
   const dispatch = useDispatch()
 
-  //todo: reuse
   const currentContext = useTypedSelector(state => state.context.current)
   const isCategory = currentContext === 'categories'
-  const entityState = useTypedSelector(
-    state => isCategory ? state.categories : state.locations
-  )
+  const entityState = useTypedSelector(state => isCategory ? state.categories : state.locations)
   const selectedEntity = entityState.selected
   const entityName = isCategory ? 'category' : 'location'
 

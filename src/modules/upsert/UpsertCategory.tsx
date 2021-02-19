@@ -1,18 +1,17 @@
-import './upsert-category.scss'
 import { Form, Input, Button, message } from 'antd'
 import { useTypedSelector } from '../../store'
 import { useHistory, useLocation } from 'react-router-dom'
 import queryString from 'query-string'
 import { useDispatch } from 'react-redux'
 import { addCategory, editCategory } from '../../store/Categories'
+import getNameInputRule from './getNameInputRule'
 
 export const UpsertCategory = () => {
-
   const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation()
+
   const categories = useTypedSelector(state => state.categories.all)
-  
   const initialCategoryName = queryString.parse(location.search).entityName
   const initialCategory = categories.find(c => c.name === initialCategoryName)
   const title = initialCategory ? 'Edit Category' : 'Create New Category'
@@ -33,16 +32,7 @@ export const UpsertCategory = () => {
     goToCategoriesList()
   }
 
-  const inputRules = [
-    {required: true, message: 'Please enter a category'},
-    {
-      validator: (rule: any, newName: string) => { 
-        const nameTaken = !!categories.find(c => c.name === newName) && initialCategory?.name !== newName
-        const message = 'A category with this name already exists'
-        return nameTaken ? Promise.reject(message) : Promise.resolve() 
-      }
-    }
-  ]
+  const inputRules = getNameInputRule(categories, initialCategory?.name, 'category')
 
   return (
     <div className="upsert-category upsert-entity">

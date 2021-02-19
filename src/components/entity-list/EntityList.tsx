@@ -22,6 +22,7 @@ const EntityList = ({items, type}: Readonly<Props>) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const selectAction = type === 'category' ? selectCategory : selectLocation
+  const pluralName = type === 'category' ? 'categories' : 'locations'
   
   const clearSelection = () => {
     dispatch(selectAction(undefined))
@@ -45,7 +46,7 @@ const EntityList = ({items, type}: Readonly<Props>) => {
         <div className="empty-state">
           <SmileIcon className="empty-state-icon" />
           <span className="empty-state-text"> 
-            {`You don't have any ${type}s yet.`} 
+            {`You don't have any ${pluralName} yet.`} 
             <br/>
             You should add some!
           </span>

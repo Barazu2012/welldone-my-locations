@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 import Categories, { saveCategoriesState } from './Categories'
 import AppContext, { saveContextState } from './AppContext'
-import Locations from './Locations'
+import Locations, { saveLocationState } from './Locations'
 
 const reducer = {
   context: AppContext.reducer,
@@ -16,6 +16,7 @@ store.subscribe(() => {
   const state = store.getState()
   saveCategoriesState(state.categories)
   saveContextState(state.context)
+  saveLocationState(state.locations)
 })
 
 export type RootState = ReturnType<typeof store.getState>

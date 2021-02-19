@@ -9,33 +9,34 @@ import Location from '../../models/Location'
 import React from 'react'
 import isEqual from 'lodash/isEqual'
 import CategorySelect from '../../components/categories/CategorySelect'
+import getNameInputRule from './getNameInputRule'
 
 interface FormData {
-  name: string, address: string, coordinatesX: number, coordinatesY: number, category: string
+  name: string, address: string, coordinatesX: string, coordinatesY: string, category: string
 }
 
 export const UpsertLocation = () => {
-
   const locations = useTypedSelector(state => state.locations.all)
-  const categories = useTypedSelector(state => state.categories.all)
   const dispatch = useDispatch()
   const history = useHistory()
+  const categories = useTypedSelector(state => state.categories.all)
   const [form] = Form.useForm()
   const routerLocation = useLocation()
+
   const initialLocationName = queryString.parse(routerLocation.search).entityName
   const initialLocation = locations.find(l => l.name === initialLocationName)
-
   const title = initialLocation ? 'Edit Location' : 'Create New Location'
 
-  const goToLocationsList = () => history.push('/')
+  const goToLocationList = () => history.push('/')
 
   const handleSubmit = ({name, address, category, coordinatesX, coordinatesY}: FormData) => {
     const location: Location = {
       name,
       address,
       category: {name: category},
-      coordinates: [coordinatesX, coordinatesY]
+      coordinates: [parseInt(coordinatesX), parseInt(coordinatesY)]
     }
+
     if (initialLocation) {
       if (!isEqual(initialLocation, location)) {
         dispatch(editLocation([location, initialLocation.name]))
@@ -46,19 +47,10 @@ export const UpsertLocation = () => {
       message.success('Created new location successfully!')
     }
 
-    goToLocationsList()
+    goToLocationList()
   }
 
-  const inputRules = [
-    {required: true, message: 'Please enter a location'},
-    {
-      validator: (rule: any, newName: string) => { 
-        const nameTaken = !!locations.find(c => c.name === newName) && initialLocation?.name !== newName
-        const message = 'A location with this name already exists'
-        return nameTaken ? Promise.reject(message) : Promise.resolve() 
-      }
-    }
-  ]
+  const inputRules = getNameInputRule(locations, initialLocation?.name, 'location')
 
   return (
     <div className="upsert-location upsert-entity">
@@ -82,7 +74,7 @@ export const UpsertLocation = () => {
           </Form.Item>
         </div>
         <Form.Item>
-          <Button type="ghost" onClick={goToLocationsList}> Cancel </Button>
+          <Button type="ghost" onClick={goToLocationList}> Cancel </Button>
           <Button type="primary" htmlType="submit"> { initialLocation ? 'Save' : 'Create' } </Button>
         </Form.Item>
       </Form>

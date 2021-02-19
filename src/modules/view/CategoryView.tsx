@@ -31,7 +31,6 @@ const CategoryView = () => {
     history.push({pathname: '/upsert'})
   }
   
-
   return (
     <div className="category-view">
       <h1 className="title"> Category Details </h1>
@@ -40,7 +39,8 @@ const CategoryView = () => {
           <EntityViewProperty label="name:" values={categoryName}/>
           <EntityViewProperty label="locations count:" values={categoryLocations.length}/>
           <EntityViewProperty className="locations-property" label="locations:" 
-            values={categoryLocations.map(l => l.name)} onValueClick={goToViewLocation}/>
+            values={categoryLocations.map(l => l.name)} onValueClick={goToViewLocation}
+          />
         </div> :
         <div className="empty-state">
           <SmileIcon className="category-view-icon"/>
@@ -51,12 +51,15 @@ const CategoryView = () => {
             Why not create some new locations? 
           </span> 
           <Button type="primary" size="large" onClick={goToCreateLocation}>
-             Create New Location 
-            </Button>
+            Create New Location 
+          </Button>
         </div>
-
       }
-      
+      <div className="back-button-wrapper">
+        <Button className="back-button" onClick={() => history.push('/')} size="large">
+          Back to category list
+        </Button>
+      </div>
     </div>
   )
 }

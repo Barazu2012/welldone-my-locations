@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import LocalStorageService from '../services/LocalStorageService';
 import Category from '../models/Category';
 
 interface CategoriesState {
@@ -6,30 +7,20 @@ interface CategoriesState {
   selected?: Category
 }
 
-const loadState = (): CategoriesState | undefined => {
-  try {
-    const serializedState = localStorage.getItem('category-state');
-    return serializedState ? JSON.parse(serializedState) : undefined
-  } catch (err) {
-    console.error('Failed to load local storage', err)
-  }
-}
+const localStorageService = new LocalStorageService<CategoriesState>()
 
-export const saveCategoriesState = ({all}: CategoriesState) => {
-  try {
-    const serializedState = JSON.stringify({all});
-    localStorage.setItem('category-state', serializedState);
-  } catch(err) {
-    console.error('Failed to save to local storage', err) 
-  }
-}
+const loadState = () => localStorageService.loadState('category-state')
 
-const testCats: Category[] = []
-for (let i = 0; i < 20; i++) {
-  testCats.push({name: `test ${i}`})
-}
-const initialState: CategoriesState = {all: testCats}
-// const initialState: CategoriesState = loadState() || { all: [] }
+export const saveCategoriesState = ({all}: CategoriesState) => 
+  localStorageService.saveState({all}, 'category-state')
+  
+// Todo: remove
+// const testCats: Category[] = []
+// for (let i = 0; i < 20; i++) {
+//   testCats.push({name: `test ${i}`})
+// }
+// const initialState: CategoriesState = {all: testCats}
+const initialState: CategoriesState = loadState() || { all: [] }
 
 const categoriesSlice = createSlice({
   name: 'categories',

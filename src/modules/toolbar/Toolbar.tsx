@@ -5,12 +5,9 @@ import ToolbarActions from './ToolbarActions'
 const { Header } = Layout
 
 const Toolbar = () => {
-  //todo: reuse
   const currentContext = useTypedSelector(state => state.context.current)
   const isCategory = currentContext === 'categories'
-  const entityState = useTypedSelector(
-    state => isCategory ? state.categories : state.locations
-  )
+  const entityState = useTypedSelector(state => isCategory ? state.categories : state.locations)
   const selectedEntity = entityState.selected
   const defaultTitle = isCategory ? 'Categories' : 'Locations'
 

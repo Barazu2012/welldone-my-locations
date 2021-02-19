@@ -2,7 +2,6 @@
 
 .category-view {
   @include TitledPage;
-
   .content {
     display: flex;
     flex-direction: column;
@@ -13,6 +12,7 @@
       width: 100%;
       white-space: normal;
       cursor: pointer;
+      overflow: visible;
       .value {
         &:hover {
           color: #1890ff;
@@ -37,5 +37,15 @@
     button {
       margin-top: 24px;
     }
+  }
+  .back-button-wrapper {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    position: fixed;
+    bottom: 60px;
+    right: 0;
+    left: 0;
+    padding: 12px 0 24px 0;
   }
 }
