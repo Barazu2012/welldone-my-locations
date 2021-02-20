@@ -14,6 +14,13 @@ import LocationList from './components/locations/LocationList';
 import LocationView from './modules/view/LocationView';
 import UpsertEntity from './modules/upsert/UpsertEntity';
 import { selectLocation } from './store/Locations';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import mapboxgl from 'mapbox-gl';
+
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
+
 
 const App = () => {
   const location = useLocation()
