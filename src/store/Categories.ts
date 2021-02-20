@@ -1,25 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import LocalStorageService from '../services/LocalStorageService';
 import Category from '../models/Category';
+import EntityStoreService from '../services/EntityStoreService';
 
-interface CategoriesState {
+export interface CategoriesState {
   all: Category[],
   selected?: Category
 }
 
 const localStorageService = new LocalStorageService<CategoriesState>()
+const entityStoreService = new EntityStoreService<CategoriesState>()
 
 const loadState = () => localStorageService.loadState('category-state')
 
 export const saveCategoriesState = ({all}: CategoriesState) => 
   localStorageService.saveState({all}, 'category-state')
   
-// Todo: remove
-// const testCats: Category[] = []
-// for (let i = 0; i < 20; i++) {
-//   testCats.push({name: `test ${i}`})
-// }
-// const initialState: CategoriesState = {all: testCats}
 const initialState: CategoriesState = loadState() || { all: [] }
 
 const categoriesSlice = createSlice({
@@ -29,17 +25,11 @@ const categoriesSlice = createSlice({
     addCategory: (state, {payload: categoryName}: PayloadAction<string>) => {
       state.all.push({name: categoryName})
     },
-    selectCategory: (state, {payload: categoryName}: PayloadAction<string | undefined>) => {
-      const category = state.all.find(c => c.name === categoryName)
-      state.selected = category
+    selectCategory: (state, {payload: categoryName}: PayloadAction<string | undefined>) =>  {
+      entityStoreService.selectCategory(state, categoryName)
     },
     deleteCategory: (state, {payload: categoryName}: PayloadAction<string>) => {
-      const idx = state.all.findIndex(c => c.name === categoryName)
-      state.all.splice(idx, 1)        
-
-      if (state.selected?.name === categoryName) {
-        state.selected = undefined
-      }
+      entityStoreService.deleteCategory(state, categoryName)
     },
     editCategory: (state, {payload}: PayloadAction<[string, string]>) => {
       const [categoryName, newName] = payload
@@ -54,4 +44,4 @@ const categoriesSlice = createSlice({
 })
 
 export const {addCategory, deleteCategory, selectCategory, editCategory} = categoriesSlice.actions
-export default categoriesSlice
+export default categoriesSlice  

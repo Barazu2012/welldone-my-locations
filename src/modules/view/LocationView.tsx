@@ -27,7 +27,9 @@ const LocationView = () => {
           <div className="properties-container">
             <EntityViewProperty label="Name:" values={selectedLocation.name}/>
             <EntityViewProperty label="Address:" values={selectedLocation.address}/>
-            <EntityViewProperty label="Category:" values={selectedLocation.category.name}/>
+            <EntityViewProperty label="Categories:" multiple 
+              values={selectedLocation.categories.map(c => c.name)}
+            />
             <EntityViewProperty label="Latitude:" values={selectedLocation.coordinates[0]}/>
             <EntityViewProperty label="Longitude:" values={selectedLocation.coordinates[1]}/>
 

@@ -1,13 +1,14 @@
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useTypedSelector } from "../../store";
-import { deleteCategory, selectCategory } from "../../store/Categories";
+import { deleteCategory } from "../../store/Categories";
 import queryString from 'query-string'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { EntityAction, generalActions, selectedEntityActions } from './toolbarActionsConfig'
 import { Modal } from "antd";
 import React from "react";
 import ToolbarAction from "./ToolbarAction";
+import { deleteLocation } from "../../store/Locations";
 
 const ToolbarActions = () => {
   const history = useHistory()
@@ -21,8 +22,8 @@ const ToolbarActions = () => {
 
   const onDelete = () => {
     if (!selectedEntity) return
-    dispatch(deleteCategory(selectedEntity.name))
-    dispatch(selectCategory(undefined))
+    const deleteAction = isCategory ? deleteCategory : deleteLocation 
+    dispatch(deleteAction(selectedEntity.name))
     history.push('/')
   }
 

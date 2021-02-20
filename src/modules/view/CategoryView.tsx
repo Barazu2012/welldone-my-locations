@@ -17,7 +17,7 @@ const CategoryView = () => {
 
   const categoryName = queryString.parse(routerLocation.search).entityName as string
   const locations = useTypedSelector(state => state.locations.all)
-  const categoryLocations = locations.filter(l => l.category.name === categoryName)
+  const categoryLocations = locations.filter(l => l.categories.find(c => c.name === categoryName))
 
   const goToViewLocation = (locationName: string) => {
     const search = queryString.stringify({entityName: locationName})
@@ -38,7 +38,7 @@ const CategoryView = () => {
         <div className="content">
           <EntityViewProperty label="name:" values={categoryName}/>
           <EntityViewProperty label="locations count:" values={categoryLocations.length}/>
-          <EntityViewProperty className="locations-property" label="locations:" 
+          <EntityViewProperty className="locations-property" multiple label="locations:" 
             values={categoryLocations.map(l => l.name)} onValueClick={goToViewLocation}
           />
         </div> :

@@ -13,7 +13,7 @@ import getNameInputRule from './getNameInputRule'
 import { CoordinatesSelector } from '../../components/map/CoordinatesSelector'
 
 interface FormData {
-  name: string, address: string, coordinatesX: string, categoryName: string, coordinates: [number, number]
+  name: string, address: string, coordinatesX: string, categoryNames: string[], coordinates: [number, number]
 }
 
 export const UpsertLocation = () => {
@@ -30,11 +30,12 @@ export const UpsertLocation = () => {
 
   const goToLocationList = () => history.push('/')
 
-  const handleSubmit = ({name, address, categoryName, coordinates}: FormData) => {
+  const handleSubmit = (test: FormData) => {
+    const {name, address, categoryNames, coordinates} = test
     const location: Location = {
       name,
       address,
-      category: {name: categoryName},
+      categories: categoryNames.map(cn => ({name: cn})),
       coordinates
     }
 
@@ -52,9 +53,10 @@ export const UpsertLocation = () => {
   }
 
   const inputRules = getNameInputRule(locations, initialLocation?.name, 'location')
-  const getRequiredRule = (fieldName: string) => (
-    {required: true, message: `Please enter a ${fieldName}`}
+  const getRequiredRule: any = (fieldName: string, arr?: boolean) => (
+    {required: true, message: `Please enter a ${fieldName}`, type: arr ? 'array' : 'string'}
   )
+  const categoriesInitialValue = initialLocation ? initialLocation.categories.map(c => c.name) : undefined
   
 
   return (
@@ -64,10 +66,10 @@ export const UpsertLocation = () => {
         <Form.Item name="name" rules={inputRules} initialValue={initialLocationName}>
           <Input placeholder="Enter the location name" autoFocus/>
         </Form.Item>
-        <Form.Item name="categoryName" initialValue={initialLocation?.category.name}
-          rules={[getRequiredRule('category')]}
+        <Form.Item name="categoryNames" initialValue={categoriesInitialValue}
+          rules={[getRequiredRule('category', true)]}
         >
-          <CategorySelect categories={categories} formData={{form, itemName: 'categoryName'}}/>
+          <CategorySelect categories={categories} formData={{form, itemName: 'categoryNames'}} multiple/>
         </Form.Item>
         <Form.Item name="address" initialValue={initialLocation?.address} 
           rules={[getRequiredRule('location address')]}

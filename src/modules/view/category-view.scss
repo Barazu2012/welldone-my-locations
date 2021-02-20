@@ -10,9 +10,7 @@
     align-items: flex-start;
     .locations-property {
       width: 100%;
-      white-space: normal;
       cursor: pointer;
-      overflow: visible;
       .value {
         &:hover {
           color: #1890ff;

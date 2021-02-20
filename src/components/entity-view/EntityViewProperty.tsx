@@ -6,9 +6,11 @@ interface Props {
   values: string | number | string[]
   className?: string
   onValueClick?(val: string | number): void
+  multiple?: boolean
 }
-const EntityViewProperty = ({label, values, className, onValueClick}: Readonly<Props>) => {
-  const itemClassName = classNames("property-wrapper", className)
+
+const EntityViewProperty = ({label, values, className, onValueClick, multiple}: Readonly<Props>) => {
+  const itemClassName = classNames("property-wrapper", className, {multiple})
   const handleValueClick = (value: string | number) => {
     if (!onValueClick) return
     onValueClick(value)

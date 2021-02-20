@@ -5,7 +5,14 @@
   font-size: 1.1em;
   margin-bottom: 4px;
   text-transform: capitalize;
+  min-height: 24px;
   .label {
     font-weight: 600;
+  }
+
+  &.multiple {
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: break-word;
   }
 }

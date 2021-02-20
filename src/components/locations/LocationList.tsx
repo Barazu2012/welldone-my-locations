@@ -1,4 +1,3 @@
-
 import './location-list.scss'
 import React, { useState } from 'react'
 import Location from '../../models/Location'
@@ -17,27 +16,47 @@ const LocationList = () => {
 
   const locations = useTypedSelector(state => state.locations.all)
   const categories = useTypedSelector(state => state.categories.all)
-  const categoriesWithLocations = categories.filter(c => 
-    locations.find(l => l.category.name === c.name)
+
+  const getLocationCategoriesArray = (location: Location): string[] => location.categories.map(c => c.name)
+  const categoriesWithLocations = categories.filter(c => locations
+    .find(l => l.categories
+    .map(lc => lc.name).includes(c.name))
   )
 
-  let sortedLocations = clone(locations).sort((l1, l2) => {
-    const [name1, name2] = [l1.name.toLowerCase(), l2.name.toLowerCase()]
-    return name1.localeCompare(name2)
-  })
+  const locationsByCategory = new Map<string, Category[]>()
+  for (let category of categoriesWithLocations) {
+    const categoryLocations = locations
+      .filter(l => getLocationCategoriesArray(l)
+      .includes(category.name)
+    )
 
-  const updatedLocations = function(): Location[] {
-    let res = sortActive ? sortedLocations : locations
-    return categoryNameFilter ? res.filter(l => l.category.name === categoryNameFilter) : res
-  }()
-
-  const getCategoryLocations = (category: Category): Location[] => {
-    return updatedLocations.filter(l => l.category.name === category.name)
+    if (categoryLocations.length) {
+      locationsByCategory.set(category.name, categoryLocations)
+    }
   }
-  
+
+  const sortLocations = (locations: Location[]) => {
+    return locations.sort((l1, l2) => {
+      const [name1, name2] = [l1.name.toLowerCase(), l2.name.toLowerCase()]
+      return name1.localeCompare(name2)
+    })
+  }
+
+  const getUpdatedLocations = (locations: Location[]): Location[] => {
+    let res = sortActive ? sortLocations(clone(locations)) : locations
+    return categoryNameFilter ? 
+      res.filter(l => getLocationCategoriesArray(l).includes(categoryNameFilter)) :
+      res
+  }
+
   const toggleSort = () => { setSortActive(!sortActive) }
   const filterByCategory = (categoryName: string) => { setCategoryNameFilter(categoryName) }
   const toggleGroupByCategory = () => { setGroupByCategoryActive(!groupByCategoryActive) }
+
+  const getCategoryUpdatedLocations = (categoryName: string): Location[] => {
+    const locations = locationsByCategory.get(categoryName) as Location[]
+    return getUpdatedLocations(locations)
+  }
 
   return (
     <>
@@ -55,10 +74,10 @@ const LocationList = () => {
         categoriesWithLocations.map((category, idx) => (
           <div className={`section${!idx ? ' first' : ''}`} key={category.name}>
             <span className="section-title">{category.name}</span>
-            <EntityList items={getCategoryLocations(category)} type="location"/>
+            <EntityList items={getCategoryUpdatedLocations(category.name)} type="location"/>
           </div>
         )) :
-        <EntityList items={updatedLocations} type="location"/>
+        <EntityList items={getUpdatedLocations(locations)} type="location"/>
       }
     </>
   )
