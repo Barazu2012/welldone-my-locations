@@ -14,3 +14,22 @@
     @include action(0 4px 0 0);
   }
 }
+.section {
+  .section-title {
+    margin-left: 24px;
+    font-weight: 600;
+    font-size: 1.2em;
+
+  }
+  .entity-list-item {
+    margin-left: 24px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &:not(.first) {
+    margin-top: 12px;
+  }
+}

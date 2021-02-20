@@ -10,9 +10,10 @@ import React from 'react'
 import isEqual from 'lodash/isEqual'
 import CategorySelect from '../../components/categories/CategorySelect'
 import getNameInputRule from './getNameInputRule'
+import { CoordinatesSelector } from '../../components/map/CoordinatesSelector'
 
 interface FormData {
-  name: string, address: string, coordinatesX: string, coordinatesY: string, category: string
+  name: string, address: string, coordinatesX: string, categoryName: string, coordinates: [number, number]
 }
 
 export const UpsertLocation = () => {
@@ -29,12 +30,12 @@ export const UpsertLocation = () => {
 
   const goToLocationList = () => history.push('/')
 
-  const handleSubmit = ({name, address, category, coordinatesX, coordinatesY}: FormData) => {
+  const handleSubmit = ({name, address, categoryName, coordinates}: FormData) => {
     const location: Location = {
       name,
       address,
-      category: {name: category},
-      coordinates: [parseInt(coordinatesX), parseInt(coordinatesY)]
+      category: {name: categoryName},
+      coordinates
     }
 
     if (initialLocation) {
@@ -51,28 +52,33 @@ export const UpsertLocation = () => {
   }
 
   const inputRules = getNameInputRule(locations, initialLocation?.name, 'location')
+  const getRequiredRule = (fieldName: string) => (
+    {required: true, message: `Please enter a ${fieldName}`}
+  )
+  
 
   return (
     <div className="upsert-location upsert-entity">
       <h1 className="title">{title}</h1>
-      <Form onFinish={handleSubmit} form={form}>
+      <Form onFinish={handleSubmit} form={form} className="upsert-location-form">
         <Form.Item name="name" rules={inputRules} initialValue={initialLocationName}>
           <Input placeholder="Enter the location name" autoFocus/>
         </Form.Item>
-        <Form.Item name="category" initialValue={initialLocation?.category.name}>
-          <CategorySelect categories={categories} form={form} formItemName="category"/>
+        <Form.Item name="categoryName" initialValue={initialLocation?.category.name}
+          rules={[getRequiredRule('category')]}
+        >
+          <CategorySelect categories={categories} formData={{form, itemName: 'categoryName'}}/>
         </Form.Item>
-        <Form.Item name="address" initialValue={initialLocation?.address}>
+        <Form.Item name="address" initialValue={initialLocation?.address} 
+          rules={[getRequiredRule('location address')]}
+        >
           <Input placeholder="Enter the location address"/>
         </Form.Item>
-        <div className="coordinates-container">
-          <Form.Item name="coordinatesX" initialValue={initialLocation?.coordinates[0]}>
-            <Input placeholder="Coordinates: x (e.g. 75.3234)" type="number"/>
-          </Form.Item>
-          <Form.Item name="coordinatesY" initialValue={initialLocation?.coordinates[1]}>
-            <Input placeholder="Coordinates: y (e.g. 25.1244)" type="number"/>
-          </Form.Item>
-        </div>
+        <Form.Item name="coordinates" className="coordinates-selector-wrapper">
+          <CoordinatesSelector initialCoordinates={initialLocation?.coordinates} 
+            formData={{form, itemName: 'coordinates'}} 
+          />
+        </Form.Item>
         <Form.Item>
           <Button type="ghost" onClick={goToLocationList}> Cancel </Button>
           <Button type="primary" htmlType="submit"> { initialLocation ? 'Save' : 'Create' } </Button>

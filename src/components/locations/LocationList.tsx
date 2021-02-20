@@ -52,9 +52,9 @@ const LocationList = () => {
         </div>
       }
       { groupByCategoryActive ?
-        categoriesWithLocations.map(category => (
-          <div className="section" key={category.name}>
-            <span>{category.name}</span>
+        categoriesWithLocations.map((category, idx) => (
+          <div className={`section${!idx ? ' first' : ''}`} key={category.name}>
+            <span className="section-title">{category.name}</span>
             <EntityList items={getCategoryLocations(category)} type="location"/>
           </div>
         )) :

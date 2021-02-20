@@ -1,5 +1,6 @@
 @import '../../modules/footbar/footbar.scss';
 @import '../../modules/toolbar/toolbar.scss';
+@import '../../styles/mixins/map_mixin';
 
 .location-view {
   align-items: center;
@@ -18,6 +19,7 @@
       }
     }
     .map-wrapper {
+      @include Map;
       display: flex;
       flex: 1;
       height: calc(100vh - #{$footbar-height} - #{$toolbar-height});

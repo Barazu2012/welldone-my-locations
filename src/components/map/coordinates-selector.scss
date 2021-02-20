@@ -1,0 +1,23 @@
+@import '../../styles/mixins/map_mixin';
+
+.coordinates-selector {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  .coordinates-text-container {
+    margin-bottom: 12px;
+    .coordinate-text {
+      margin-right: 12px;
+      .label {
+        font-weight: 600;
+        margin-right: 4px;
+      }
+    }
+  }
+  .map-wrapper {
+    @include Map;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}

@@ -4,6 +4,9 @@ import { useTypedSelector } from '../../store'
 import {StaticMap as Map} from 'react-map-gl';
 import { Button } from 'antd';
 import EntityViewProperty from '../../components/entity-view/EntityViewProperty';
+import React from 'react';
+import { Marker } from 'react-map-gl';
+import { AimOutlined as LocationIcon } from '@ant-design/icons';
 
 const LocationView = () => {
   const history = useHistory()
@@ -14,7 +17,7 @@ const LocationView = () => {
     width: "auto",
     latitude: selectedLocation?.coordinates[0],
     longitude: selectedLocation?.coordinates[1],
-    zoom: 8
+    zoom: 15
   }
 
   return (
@@ -35,7 +38,11 @@ const LocationView = () => {
 
           <div className="map-wrapper">
             <Map className="map" mapStyle="mapbox://styles/mapbox/bright-v9" 
-              {...viewport} style={{flex: 1}} />
+              {...viewport} style={{flex: 1}}>
+                <Marker latitude={selectedLocation.coordinates[0]} longitude={selectedLocation.coordinates[1]} >
+                  <LocationIcon className="marker-icon"/>
+                </Marker>
+            </Map>
           </div>
         </div>
       }

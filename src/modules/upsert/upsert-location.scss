@@ -1,12 +1,17 @@
+@import '../footbar/footbar.scss';
+@import '../toolbar/toolbar.scss';
+
+
 .upsert-location {
-  .coordinates-container {
+  .upsert-location-form {
     display: flex;
-    justify-content: space-between;
-    > div {
-      display: flex;
-      width: calc(50% - 12px);
-      > input {
-        width: 100%;
+    flex-direction: column;
+    flex: 1;
+    .coordinates-selector-wrapper {
+      flex: 1;
+      .ant-form-item-control, .ant-form-item-control-input, .ant-form-item-control-input-content {
+        display: flex;
+        height: 100%;
       }
     }
   }
