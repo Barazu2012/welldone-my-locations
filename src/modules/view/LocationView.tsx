@@ -1,10 +1,10 @@
 import './location-view.scss'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../store'
-import {StaticMap as Map} from 'react-map-gl';
+import Map from 'react-map-gl';
 import { Button } from 'antd';
 import EntityViewProperty from '../../components/entity-view/EntityViewProperty';
-import React from 'react';
+import React, { useState } from 'react';
 import { Marker } from 'react-map-gl';
 import { AimOutlined as LocationIcon } from '@ant-design/icons';
 
@@ -12,13 +12,13 @@ const LocationView = () => {
   const history = useHistory()
   const selectedLocation = useTypedSelector(state => state.locations.selected)
 
-  const viewport = {
+  const [viewport, setViewport] = useState({
     height: "auto",
     width: "auto",
     latitude: selectedLocation?.coordinates[0],
     longitude: selectedLocation?.coordinates[1],
-    zoom: 15
-  }
+    zoom: 13.5
+  })
 
   return (
     <div className="location-view">
@@ -30,8 +30,8 @@ const LocationView = () => {
             <EntityViewProperty label="Categories:" multiple 
               values={selectedLocation.categories.map(c => c.name)}
             />
-            <EntityViewProperty label="Latitude:" values={selectedLocation.coordinates[0]}/>
-            <EntityViewProperty label="Longitude:" values={selectedLocation.coordinates[1]}/>
+            <EntityViewProperty label="Latitude:" values={Number(selectedLocation.coordinates[0]).toFixed(3)}/>
+            <EntityViewProperty label="Longitude:" values={Number(selectedLocation.coordinates[0]).toFixed(3)}/>
 
             <Button onClick={() => history.push('/')}>
               Back to location list 
@@ -40,7 +40,7 @@ const LocationView = () => {
 
           <div className="map-wrapper">
             <Map className="map" mapStyle="mapbox://styles/mapbox/bright-v9" 
-              {...viewport} style={{flex: 1}}>
+              {...viewport} style={{flex: 1}} onViewportChange={(v: typeof viewport) => setViewport(v)}>
                 <Marker latitude={selectedLocation.coordinates[0]} longitude={selectedLocation.coordinates[1]} >
                   <LocationIcon className="marker-icon"/>
                 </Marker>
