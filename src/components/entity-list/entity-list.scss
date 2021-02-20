@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
   .entity-list-item {
     word-break: break-word;
     padding: 12px 24px;
@@ -22,7 +23,8 @@
     flex-direction: column;
     align-items: center;
     flex: 1;
-    padding: 20vh 10vw;
+    padding: 20% 10vw;
+    height: 100%;
     .empty-state-icon {
       font-size: 9em;
     }
