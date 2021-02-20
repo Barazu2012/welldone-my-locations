@@ -1,6 +1,6 @@
 $footbar-height: 64px;
 .footbar {
-  position: absolute;
+  position: fixed;
   display: flex;
   align-items: center;
   height: $footbar-height;
