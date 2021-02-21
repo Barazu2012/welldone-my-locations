@@ -4,10 +4,10 @@
   @include ellipsis;
   font-size: 1.1em;
   margin-bottom: 4px;
-  text-transform: capitalize;
   min-height: 24px;
   .label {
     font-weight: 600;
+    text-transform: capitalize;
   }
 
   &.multiple {
