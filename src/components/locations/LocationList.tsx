@@ -14,56 +14,63 @@ const LocationList = () => {
   const [categoryNameFilter, setCategoryNameFilter] = useState<string>()
   const [groupByCategoryActive, setGroupByCategoryActive] = useState(false)
 
-  const locations = useTypedSelector(state => state.locations.all)
+  const allLocations = useTypedSelector(state => state.locations.all)
   const categories = useTypedSelector(state => state.categories.all)
 
   const getLocationCategoriesArray = (location: Location): string[] => location.categories.map(c => c.name)
-  const categoriesWithLocations = categories.filter(c => locations
-    .find(l => l.categories
-    .map(lc => lc.name).includes(c.name))
-  )
 
-  const locationsByCategory = new Map<string, Category[]>()
-  for (let category of categoriesWithLocations) {
-    const categoryLocations = locations
+  const updatedLocations = getUpdatedLocations(allLocations)
+
+  const updatedLocationsByCategory = new Map<string, Category[]>()
+  for (let category of getCategoriesWithLocations(updatedLocations)) {
+    const updatedCategoryLocations = updatedLocations
       .filter(l => getLocationCategoriesArray(l)
       .includes(category.name)
     )
+    
+    if (!updatedCategoryLocations.length) continue
 
-    if (categoryLocations.length) {
-      locationsByCategory.set(category.name, categoryLocations)
-    }
+    updatedLocationsByCategory.set(category.name, updatedCategoryLocations)
   }
 
-  const sortLocations = (locations: Location[]) => {
+  function getCategoriesWithLocations(locations: Location[]): Category[] {
+    return categories.filter(c => locations
+      .find(l => l.categories
+      .map(lc => lc.name).includes(c.name))
+    )
+  }
+
+  function sortLocations(locations: Location[]) {
     return locations.sort((l1, l2) => {
       const [name1, name2] = [l1.name.toLowerCase(), l2.name.toLowerCase()]
       return name1.localeCompare(name2)
     })
   }
 
-  const getUpdatedLocations = (locations: Location[]): Location[] => {
+  function getCategoryNameFilteredLocations(locations: Location[]): Location[] {
+    if (!categoryNameFilter) return locations
+    return locations.filter(l => getLocationCategoriesArray(l).includes(categoryNameFilter))
+  }
+
+  function getUpdatedLocations(locations: Location[]): Location[] {
     let res = sortActive ? sortLocations(clone(locations)) : locations
-    return categoryNameFilter ? 
-      res.filter(l => getLocationCategoriesArray(l).includes(categoryNameFilter)) :
-      res
+    return getCategoryNameFilteredLocations(res)
   }
 
   const toggleSort = () => { setSortActive(!sortActive) }
   const filterByCategory = (categoryName: string) => { setCategoryNameFilter(categoryName) }
   const toggleGroupByCategory = () => { setGroupByCategoryActive(!groupByCategoryActive) }
 
-  const getCategoryUpdatedLocations = (categoryName: string): Location[] => {
-    const locations = locationsByCategory.get(categoryName) as Location[]
-    return getUpdatedLocations(locations)
-  }
+  const getCategoryLocations = (categoryName: string): Location[] => (
+    updatedLocationsByCategory.get(categoryName) as Location[]
+  )
 
   return (
     <>
-      { !!locations.length &&
+      { !!allLocations.length &&
         <div className="list-actions-container">
           <div className="filter-wrapper">
-            <CategorySelect categories={categoriesWithLocations} onSelect={filterByCategory}
+            <CategorySelect categories={getCategoriesWithLocations(allLocations)} onSelect={filterByCategory}
               placeholder="Filter by Category"/>
           </div>
           <LocationListAction icon={SortIcon} onClick={toggleSort} title="Sort Alphabetically"/>
@@ -71,13 +78,13 @@ const LocationList = () => {
         </div>
       }
       { groupByCategoryActive ?
-        categoriesWithLocations.map((category, idx) => (
+        getCategoriesWithLocations(updatedLocations).map((category, idx) => (
           <div className={`section${!idx ? ' first' : ''}`} key={category.name}>
             <span className="section-title">{category.name}</span>
-            <EntityList items={getCategoryUpdatedLocations(category.name)} type="location"/>
+            <EntityList items={getCategoryLocations(category.name)} type="location"/>
           </div>
         )) :
-        <EntityList items={getUpdatedLocations(locations)} type="location"/>
+        <EntityList items={updatedLocations} type="location"/>
       }
     </>
   )
